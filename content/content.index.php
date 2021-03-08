@@ -360,8 +360,8 @@ class contentExtensionImportcsvIndex extends AdministrationPage
                 $filter = Symphony::Database()->fetchVar('id' , 0 , "SELECT `f`.`id`
                                           FROM `tbl_fields` AS `f`, `tbl_sections` AS `s`
                                           WHERE `s`.`id` = `f`.`parent_section`
-                                          AND f.`element_name` = '$field_name'
-                                          AND `s`.`handle` = '" . $section->get('handle') . "' LIMIT 1");
+                                          AND f.`element_name` = '" .MySQL::cleanValue(strip_tags($field_name)). "'
+                                          AND `s`.`handle` = '" . MySQL::cleanValue(strip_tags($section->get('handle'))) . "' LIMIT 1");
 
                 $field = FieldManager::fetch($filter);
 
@@ -426,7 +426,7 @@ class contentExtensionImportcsvIndex extends AdministrationPage
         $csv .= "\r\n";
 
         // Get the data of the field:
-        $data    = Symphony::Database()->fetch('SELECT * FROM `tbl_entries_data_'.$fieldID.'`;');
+        $data    = Symphony::Database()->fetch('SELECT * FROM `tbl_entries_data_'.MySQL::cleanValue(strip_tags($fieldID)).'`;');
 
         // Loop through the data:
         foreach ($data as $row) {
@@ -499,7 +499,7 @@ class contentExtensionImportcsvIndex extends AdministrationPage
                     }
                 }
                 // Update the data in the database:
-                Symphony::Database()->update($data, 'tbl_entries_data_'.$fieldID, '`entry_id` = '.trim($row['entry_id']));
+                Symphony::Database()->update($data, 'tbl_entries_data_'.MySQL::cleanValue(strip_tags($fieldID)), '`entry_id` = '.MySQL::cleanValue(strip_tags(trim($row['entry_id']))));
                 $count++;
             }
         }
