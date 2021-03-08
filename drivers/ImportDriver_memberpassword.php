@@ -43,6 +43,6 @@ class ImportDriver_memberpassword extends ImportDriver_default
      */
     public function export($data, $entry_id = null)
     {
-        return trim($data['password']);
+        return '';
     }
 }
